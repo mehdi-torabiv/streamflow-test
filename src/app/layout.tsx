@@ -1,7 +1,12 @@
+'use client';
 // import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import dynamic from 'next/dynamic';
+import { Box, CssBaseline, StyledEngineProvider, ThemeProvider } from '@mui/material';
+import configs from '@/configs';
+import Appbar from '@/components/layouts/Appbar';
+import Sidebar from '@/components/layouts/Sidebar';
 
 const WalletProvider = dynamic(() => import('@/providers/WalletProvider'), {
   ssr: false,
@@ -21,11 +26,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className} suppressHydrationWarning={true}>
-        <WalletProvider>
-          {children}
-        </WalletProvider>
-      </body>
+      <StyledEngineProvider injectFirst>
+        <ThemeProvider theme={configs.theme}>
+          <body className={inter.className} suppressHydrationWarning={true}>
+            <CssBaseline />
+            <WalletProvider>
+              <Appbar />
+              <Box display="flex">
+                <Sidebar />
+                {children}
+              </Box>
+            </WalletProvider>
+          </body>
+        </ThemeProvider>
+      </StyledEngineProvider>
     </html>
   );
 }

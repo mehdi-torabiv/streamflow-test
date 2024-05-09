@@ -4,8 +4,7 @@ import React, { FC, ReactNode, useMemo } from 'react';
 import { ConnectionProvider, useWallet, WalletProvider } from '@solana/wallet-adapter-react';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import {
-    WalletModalProvider,
-    WalletDisconnectButton
+    WalletModalProvider
 } from '@solana/wallet-adapter-react-ui';
 import { clusterApiUrl } from '@solana/web3.js';
 
@@ -32,7 +31,6 @@ const Wallet: FC<WalletProps> = ({ children }) => {
         <ConnectionProvider endpoint={endpoint}>
             <WalletProvider wallets={wallets} autoConnect>
                 <WalletModalProvider>
-                    <WalletDisconnectButton />
                     {children}
                 </WalletModalProvider>
             </WalletProvider>

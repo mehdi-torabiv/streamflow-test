@@ -1,15 +1,12 @@
 "use client";
 
-import WalletBalances from "@/components/WalletBalances";
-import useSolanaTokens from "@/hooks/useSolanaTokens";
-import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+import WalletBalances from "@/components/shared/WalletBalances";
 
 export default function Home() {
 
   return (
-    <main className="flex flex-col items-center justify-center min-h-screen">
+    <div>
       <WalletBalances />
-      <WalletMultiButton style={{}} />
-    </main>
+    </div>
   );
 }

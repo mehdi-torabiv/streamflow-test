@@ -1,5 +1,5 @@
 import React from 'react';
-import useSolanaTokens from '../hooks/useSolanaTokens';
+import useSolanaTokens from '../../hooks/useSolanaTokens';
 
 const WalletBalances = () => {
     const { tokens, loading } = useSolanaTokens();

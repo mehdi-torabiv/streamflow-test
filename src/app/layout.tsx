@@ -34,7 +34,9 @@ export default function RootLayout({
               <Appbar />
               <Box display="flex">
                 <Sidebar />
-                {children}
+                <Box flexGrow={1} p={2}>
+                  {children}
+                </Box>
               </Box>
             </WalletProvider>
           </body>

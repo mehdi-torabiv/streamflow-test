@@ -1,7 +1,7 @@
 'use client';
 
-import React, { FC, ReactNode, useMemo } from 'react';
-import { ConnectionProvider, useWallet, WalletProvider } from '@solana/wallet-adapter-react';
+import { FC, ReactNode, useMemo } from 'react';
+import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import {
     WalletModalProvider
@@ -15,7 +15,7 @@ interface WalletProps {
     children?: ReactNode;
 }
 
-const Wallet: FC<WalletProps> = ({ children }) => {
+function Wallet({ children }: WalletProps) {
     // The network can be set to 'devnet', 'testnet', or 'mainnet-beta'.
     const network = WalletAdapterNetwork.Devnet;
 

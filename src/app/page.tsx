@@ -41,7 +41,7 @@ export default function Home() {
     setCancelLoading((prev) => ({ ...prev, [id]: true }));
     await cancelStream(
       {
-        id: id,
+        id,
       },
       {
         invoker: wallet as unknown as Keypair,

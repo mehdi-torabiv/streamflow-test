@@ -3,7 +3,12 @@
 import { Inter } from 'next/font/google';
 import './globals.css';
 import dynamic from 'next/dynamic';
-import { Box, CssBaseline, StyledEngineProvider, ThemeProvider } from '@mui/material';
+import {
+  Box,
+  CssBaseline,
+  StyledEngineProvider,
+  ThemeProvider,
+} from '@mui/material';
 import configs from '@/configs';
 import Appbar from '@/components/layouts/Appbar';
 import Sidebar from '@/components/layouts/Sidebar';
@@ -14,7 +19,6 @@ const WalletProvider = dynamic(() => import('@/providers/WalletProvider'), {
 });
 
 const inter = Inter({ subsets: ['latin'] });
-
 
 export default function RootLayout({
   children,

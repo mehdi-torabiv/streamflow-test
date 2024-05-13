@@ -1,11 +1,19 @@
 'use client';
 import { DRAWER_WIDTH } from '@/configs/constants';
-import { Divider, Drawer, List, ListItem, ListItemButton, ListItemText, Toolbar } from '@mui/material';
+import {
+  Divider,
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  Toolbar,
+} from '@mui/material';
 import { useRouter, usePathname } from 'next/navigation';
 
 interface SidebarMenuItem {
-    text: string;
-    path: string;
+  text: string;
+  path: string;
 }
 
 /**
@@ -33,56 +41,58 @@ interface SidebarMenuItem {
  * @returns {JSX.Element} The Sidebar component with a list of menu items.
  */
 function Sidebar(): JSX.Element {
-    const router = useRouter();
-    const pathname = usePathname();
+  const router = useRouter();
+  const pathname = usePathname();
 
-    const menuItems: SidebarMenuItem[] = [
-        { text: 'Stream list', path: '/' },
-        { text: 'Create stream', path: '/stream' },
-    ];
+  const menuItems: SidebarMenuItem[] = [
+    { text: 'Stream list', path: '/' },
+    { text: 'Create stream', path: '/stream' },
+  ];
 
-    return (
-        <Drawer
-            sx={{
-                width: `${DRAWER_WIDTH}px`,
-                flexShrink: 0,
-                '& .MuiDrawer-paper': {
-                    width: `${DRAWER_WIDTH}px`,
-                    backgroundColor: 'primary.main',
+  return (
+    <Drawer
+      sx={{
+        width: `${DRAWER_WIDTH}px`,
+        flexShrink: 0,
+        '& .MuiDrawer-paper': {
+          width: `${DRAWER_WIDTH}px`,
+          backgroundColor: 'primary.main',
+        },
+      }}
+      variant="permanent"
+      anchor="left"
+    >
+      <Toolbar />
+      <Divider />
+      <List
+        sx={{
+          padding: '0 0.5rem',
+          mt: '1rem',
+        }}
+      >
+        {menuItems.map((item) => (
+          <ListItem key={item.text} disablePadding>
+            <ListItemButton
+              selected={pathname === item.path}
+              onClick={() => router.push(item.path)}
+              sx={{
+                '&.Mui-selected': {
+                  backgroundColor: 'white',
+                  borderRadius: '2px',
+                  '&:hover': {
+                    backgroundColor: 'white',
+                    opacity: 0.9,
+                  },
                 },
-            }}
-            variant="permanent"
-            anchor="left"
-        >
-            <Toolbar />
-            <Divider />
-            <List sx={{
-                padding: '0 0.5rem',
-                mt: '1rem',
-            }}>
-                {menuItems.map((item) => (
-                    <ListItem key={item.text} disablePadding>
-                        <ListItemButton
-                            selected={pathname === item.path}
-                            onClick={() => router.push(item.path)}
-                            sx={{
-                                '&.Mui-selected': {
-                                    backgroundColor: 'white',
-                                    borderRadius: '2px',
-                                    '&:hover': {
-                                        backgroundColor: 'white',
-                                        opacity: 0.9,
-                                    },
-                                },
-                            }}
-                        >
-                            <ListItemText primary={item.text} />
-                        </ListItemButton>
-                    </ListItem>
-                ))}
-            </List>
-        </Drawer>
-    );
+              }}
+            >
+              <ListItemText primary={item.text} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+    </Drawer>
+  );
 }
 
 export default Sidebar;

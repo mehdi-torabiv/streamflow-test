@@ -27,7 +27,8 @@ import { Keypair } from '@solana/web3.js';
 
 function Page() {
   const [activeStep, setActiveStep] = useState<StepSchemaKey>('Configuration');
-  const [isTransactionLoading, setIsTransactionLoading] = useState<boolean>(false);
+  const [isTransactionLoading, setIsTransactionLoading] =
+    useState<boolean>(false);
   const wallet = useWallet();
 
   const router = useRouter();
@@ -81,19 +82,29 @@ function Page() {
         tokenAmount,
         vestingDuration,
         vestingDurationUnit,
-        unlockSchedule
+        unlockSchedule,
       } = methods.getValues();
 
       const totalAmountInLamports = getBN(tokenAmount, 9);
-      const unlockDurationInSeconds = convertDurationToSeconds(1, unlockSchedule);
-      const periodInSeconds = convertDurationToSeconds(vestingDuration, vestingDurationUnit);
+      const unlockDurationInSeconds = convertDurationToSeconds(
+        1,
+        unlockSchedule,
+      );
+      const periodInSeconds = convertDurationToSeconds(
+        vestingDuration,
+        vestingDurationUnit,
+      );
       const numberOfIntervals = periodInSeconds / unlockDurationInSeconds;
-      const amountPerInterval = totalAmountInLamports.div(new BN(numberOfIntervals));
-
+      const amountPerInterval = totalAmountInLamports.div(
+        new BN(numberOfIntervals),
+      );
 
       const createStreamParams = {
-        recipient: recipient,
-        tokenId: mint !== 'Native SOL' ? mint : 'So11111111111111111111111111111111111111112',
+        recipient,
+        tokenId:
+          mint !== 'Native SOL'
+            ? mint
+            : 'So11111111111111111111111111111111111111112',
         start: getCurrentTimestampInSeconds() + DELAY_IN_SECONDS,
         amount: totalAmountInLamports,
         period: unlockDurationInSeconds,
@@ -104,46 +115,49 @@ function Page() {
         canTopup: false,
         cancelableBySender:
           returnCancelableBy(cancellationRights).cancelableBySender,
-        cancelableByRecipient: returnCancelableBy(cancellationRights)
-          .cancelableByRecipient,
+        cancelableByRecipient:
+          returnCancelableBy(cancellationRights).cancelableByRecipient,
         transferableBySender:
           returnTransferableBy(transferableRights).transferableBySender,
-        transferableByRecipient: returnTransferableBy(transferableRights)
-          .transferableByRecipient,
+        transferableByRecipient:
+          returnTransferableBy(transferableRights).transferableByRecipient,
         automaticWithdrawal: true,
         withdrawalFrequency: unlockDurationInSeconds,
         partner: undefined,
       };
 
-      await createStream(createStreamParams, {
-        sender: wallet as unknown as Keypair,
-        isNative: true
-      },
+      await createStream(
+        createStreamParams,
+        {
+          sender: wallet as unknown as Keypair,
+          isNative: true,
+        },
         (stream) => {
           showMessage(`${stream.txId} created successfully.`, 'success');
-          router.push('/')
+          router.push('/');
         },
         (error) => {
           showMessage(`${error}`, 'error');
-        }
+        },
       );
       setIsTransactionLoading(false);
     }
   };
 
-
   if (isTransactionLoading) {
-    return <Backdrop
-      sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-      open={true}
-    >
-      <CircularProgress color="primary" />
-    </Backdrop>
+    return (
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={true}
+      >
+        <CircularProgress color="primary" />
+      </Backdrop>
+    );
   }
 
   return (
     <>
-      <Seo titleTemplate='Create Streams' />
+      <Seo titleTemplate="Create Streams" />
       <FormProvider {...methods}>
         <Paper elevation={3}>
           <CustomStepper
@@ -159,7 +173,12 @@ function Page() {
             {activeStep === 'Recipients' && (
               <RecipientsSections key="recipients" />
             )}
-            {activeStep === 'Review' && <ReviewSections key="review" reviewTransaction={methods.getValues()} />}
+            {activeStep === 'Review' && (
+              <ReviewSections
+                key="review"
+                reviewTransaction={methods.getValues()}
+              />
+            )}
           </CustomStepper>
         </Paper>
       </FormProvider>

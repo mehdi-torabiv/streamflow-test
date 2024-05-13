@@ -1,7 +1,13 @@
 import React from 'react';
-import { Box, Button, Stack, Step, StepContent, StepLabel, Stepper } from '@mui/material';
-
-
+import {
+  Box,
+  Button,
+  Stack,
+  Step,
+  StepContent,
+  StepLabel,
+  Stepper,
+} from '@mui/material';
 
 /**
  * `CustomStepper` is a React component that renders a vertical stepper UI. It allows users to navigate through a series of steps using "Next" and "Cancel" (or "Finish") buttons. This component is built with Material-UI's Stepper, Step, StepLabel, and StepContent components.
@@ -14,7 +20,7 @@ import { Box, Button, Stack, Step, StepContent, StepLabel, Stepper } from '@mui/
  * @param {() => void} [handleBack] - An optional function that will be called when the user clicks the "Cancel" button. It is used to go back to the previous step or cancel the operation.
  * @param {() => void} [handleFinish] - An optional function that will be called when the user clicks the "Finish" button. It is used to complete the process.
  * @returns {JSX.Element}
- * 
+ *
  * The stepper supports navigation through the provided steps, with the UI adjusting based on the current step index. At the last step, the "Next" button changes to a "Finish" button to indicate completion of the process.
  *
  * Example Usage:
@@ -37,45 +43,62 @@ import { Box, Button, Stack, Step, StepContent, StepLabel, Stepper } from '@mui/
  */
 
 interface CustomStepperProps {
-    activeStep: number;
-    steps: string[];
-    children: React.ReactNode;
-    handleNext?: () => void;
-    handleBack?: () => void;
-    handleFinish?: () => void;
+  activeStep: number;
+  steps: string[];
+  children: React.ReactNode;
+  handleNext?: () => void;
+  handleBack?: () => void;
+  handleFinish?: () => void;
 }
 
-function CustomStepper({ steps, activeStep, children, handleNext, handleBack, handleFinish }: CustomStepperProps): JSX.Element {
-    return (
-        <Stack sx={{ width: '100%' }} spacing={4} padding={4}>
-            <Stepper activeStep={activeStep} orientation="vertical">
-                {steps.map((label, index) => (
-                    <Step key={label}>
-                        <StepLabel>{label}</StepLabel>
-                        <StepContent>
-                            {children}
-                            <Box sx={{ width: '100%', mt: 2, display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-                                <Button onClick={handleBack} variant='outlined' disabled={activeStep === 0}>
-                                    Cancel
-                                </Button>
-                                {
-                                    activeStep < steps.length - 1 ? (
-                                        <Button onClick={handleNext} variant='contained'>
-                                            Next
-                                        </Button>
-                                    ) : (
-                                        <Button onClick={handleFinish} variant='contained'>
-                                            Finish
-                                        </Button>
-                                    )
-                                }
-                            </Box>
-                        </StepContent>
-                    </Step>
-                ))}
-            </Stepper>
-        </Stack>
-    );
+function CustomStepper({
+  steps,
+  activeStep,
+  children,
+  handleNext,
+  handleBack,
+  handleFinish,
+}: CustomStepperProps): JSX.Element {
+  return (
+    <Stack sx={{ width: '100%' }} spacing={4} padding={4}>
+      <Stepper activeStep={activeStep} orientation="vertical">
+        {steps.map((label) => (
+          <Step key={label}>
+            <StepLabel>{label}</StepLabel>
+            <StepContent>
+              {children}
+              <Box
+                sx={{
+                  width: '100%',
+                  mt: 2,
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                }}
+              >
+                <Button
+                  onClick={handleBack}
+                  variant="outlined"
+                  disabled={activeStep === 0}
+                >
+                  Cancel
+                </Button>
+                {activeStep < steps.length - 1 ? (
+                  <Button onClick={handleNext} variant="contained">
+                    Next
+                  </Button>
+                ) : (
+                  <Button onClick={handleFinish} variant="contained">
+                    Finish
+                  </Button>
+                )}
+              </Box>
+            </StepContent>
+          </Step>
+        ))}
+      </Stepper>
+    </Stack>
+  );
 }
 
 export default CustomStepper;

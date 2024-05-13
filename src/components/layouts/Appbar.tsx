@@ -1,7 +1,7 @@
-'use client'
-import { DRAWER_WIDTH } from '@/configs/constants'
-import { AppBar, Box, Container } from '@mui/material'
-import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'
+'use client';
+import { DRAWER_WIDTH } from '@/configs/constants';
+import { AppBar, Box } from '@mui/material';
+import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 
 /**
  * AppBar component that integrates with Material-UI and the Solana Wallet Adapter.
@@ -26,16 +26,24 @@ import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'
  * @returns {JSX.Element} The AppBar component with a wallet connection button.
  */
 function Appbar(): JSX.Element {
-    return (
-        <AppBar position="relative" sx={{ width: `calc(100% - ${DRAWER_WIDTH}px)`, ml: `${DRAWER_WIDTH}px`, padding: '10px 0' }}
-        >
-            <Box display="flex" justifyContent="flex-end" px={2}>
-                <WalletMultiButton style={{
-                    backgroundColor: '#4a90e2',
-                }} />
-            </Box>
-        </AppBar >
-    )
+  return (
+    <AppBar
+      position="relative"
+      sx={{
+        width: `calc(100% - ${DRAWER_WIDTH}px)`,
+        ml: `${DRAWER_WIDTH}px`,
+        padding: '10px 0',
+      }}
+    >
+      <Box display="flex" justifyContent="flex-end" px={2}>
+        <WalletMultiButton
+          style={{
+            backgroundColor: '#4a90e2',
+          }}
+        />
+      </Box>
+    </AppBar>
+  );
 }
 
-export default Appbar
+export default Appbar;

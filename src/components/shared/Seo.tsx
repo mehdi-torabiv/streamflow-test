@@ -10,10 +10,10 @@ interface SeoProps {
 /**
  * Component that sets the SEO metadata for the page.
  *
- * @param {SeoProps} param0
- * @param {string} param0.title
- * @param {string} param0.titleTemplate
- * @param {string} param0.description
+ * @param {SeoProps} param
+ * @param {string} param.title
+ * @param {string} param.titleTemplate
+ * @param {string} param.description
  * @returns {JSX.Element}
  */
 function Seo({

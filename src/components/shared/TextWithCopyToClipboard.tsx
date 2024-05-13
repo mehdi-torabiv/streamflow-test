@@ -7,7 +7,14 @@ interface TextWithCopyToClipboardProps {
     text: string;
 }
 
-function TextWithCopyToClipboard({ text }: TextWithCopyToClipboardProps) {
+/**
+ * Component that displays text with a copy to clipboard button.
+ *
+ * @param {TextWithCopyToClipboardProps} param0
+ * @param {string} param0.text
+ * @returns {JSX.Element}
+ */
+function TextWithCopyToClipboard({ text }: TextWithCopyToClipboardProps): JSX.Element {
     const { showMessage } = useSnackbar();
 
     const truncate = (text: string, maxLength: number) => {

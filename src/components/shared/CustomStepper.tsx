@@ -13,6 +13,7 @@ import { Box, Button, Stack, Step, StepContent, StepLabel, Stepper } from '@mui/
  * @param {() => void} [handleNext] - An optional function that will be called when the user clicks the "Next" or "Finish" button. It is used to advance the stepper or complete the process.
  * @param {() => void} [handleBack] - An optional function that will be called when the user clicks the "Cancel" button. It is used to go back to the previous step or cancel the operation.
  * @param {() => void} [handleFinish] - An optional function that will be called when the user clicks the "Finish" button. It is used to complete the process.
+ * @returns {JSX.Element}
  * 
  * The stepper supports navigation through the provided steps, with the UI adjusting based on the current step index. At the last step, the "Next" button changes to a "Finish" button to indicate completion of the process.
  *
@@ -44,7 +45,7 @@ interface CustomStepperProps {
     handleFinish?: () => void;
 }
 
-function CustomStepper({ steps, activeStep, children, handleNext, handleBack, handleFinish }: CustomStepperProps) {
+function CustomStepper({ steps, activeStep, children, handleNext, handleBack, handleFinish }: CustomStepperProps): JSX.Element {
     return (
         <Stack sx={{ width: '100%' }} spacing={4} padding={4}>
             <Stepper activeStep={activeStep} orientation="vertical">

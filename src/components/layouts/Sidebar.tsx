@@ -30,9 +30,9 @@ interface SidebarMenuItem {
  * The component highlights the currently active menu item based on the current route path.
  * It responds to clicks on each menu item by navigating to the respective route.
  *
- * @returns The Sidebar component with a list of menu items.
+ * @returns {JSX.Element} The Sidebar component with a list of menu items.
  */
-function Sidebar() {
+function Sidebar(): JSX.Element {
     const router = useRouter();
     const pathname = usePathname();
 

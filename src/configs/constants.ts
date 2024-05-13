@@ -18,7 +18,7 @@ export const unlockScheduleOptions = [
   { label: 'Per Hour', value: 'Hour' },
   { label: 'Daily', value: 'Day' },
   { label: 'Weekly', value: 'Week' },
-  { label: 'Every Two Weeks', value: 'Bi-week' },
+  { label: 'Bi-week', value: 'Bi-week' },
   { label: 'Monthly', value: 'Month' },
   { label: 'Quarterly', value: 'Quarter' },
   { label: 'Yearly', value: 'Year' },

@@ -19,6 +19,7 @@ import { getBN } from '@streamflow/stream';
 import { createStream } from '@/services/StreamflowService';
 import { useSnackbar } from '@/context/SnackbarContext';
 import { useRouter } from 'next/navigation';
+import Seo from '@/components/shared/Seo';
 
 function Page() {
   const [activeStep, setActiveStep] = useState<StepSchemaKey>('Configuration');
@@ -84,27 +85,27 @@ function Page() {
       const amountPerPeriod = tokenAmount / (periodInSeconds / unlockDurationInSeconds);
 
       const createStreamParams = {
-        recipient: recipient, // The public key of the recipient
-        tokenId: mint !== 'Native SOL' ? mint : 'So11111111111111111111111111111111111111112', // The mint of the token
-        start: getCurrentTimestampInSeconds() + 60, // Start time in seconds
-        amount: getBN(tokenAmount, 9), // X SOL, represented in lamports
-        period: unlockDurationInSeconds, // Example: unlocks every X second
-        cliff: getCurrentTimestampInSeconds() + 60, // first unlock time in seconds
-        cliffAmount: getBN(0, 9), // No tokens released at the cliff
+        recipient: recipient,
+        tokenId: mint !== 'Native SOL' ? mint : 'So11111111111111111111111111111111111111112',
+        start: getCurrentTimestampInSeconds() + 60,
+        amount: getBN(tokenAmount, 9),
+        period: unlockDurationInSeconds,
+        cliff: getCurrentTimestampInSeconds() + 60,
+        cliffAmount: getBN(0, 9),
         amountPerPeriod: getBN(amountPerPeriod, 9),
-        name: 'TEST STREAM', // Name of the stream
-        canTopup: false, // Whether the sender can top up the stream
+        name: 'TEST STREAM',
+        canTopup: false,
         cancelableBySender:
-          returnCancelableBy(cancellationRights).cancelableBySender, // Whether the sender can cancel the stream
+          returnCancelableBy(cancellationRights).cancelableBySender,
         cancelableByRecipient: returnCancelableBy(cancellationRights)
-          .cancelableByRecipient, // Whether the recipient can cancel the stream
+          .cancelableByRecipient,
         transferableBySender:
-          returnTransferableBy(transferableRights).transferableBySender, // Whether the sender can transfer the stream
-        transferableByRecipient: returnTransferableBy(transferableRights) // Whether the recipient can transfer the stream
+          returnTransferableBy(transferableRights).transferableBySender,
+        transferableByRecipient: returnTransferableBy(transferableRights)
           .transferableByRecipient,
-        automaticWithdrawal: true, // Whether the stream should automatically withdraw
-        withdrawalFrequency: 1, // How often the stream should withdraw (it will use period as default)
-        partner: undefined, // The public key of the partner
+        automaticWithdrawal: true,
+        withdrawalFrequency: 1,
+        partner: undefined,
       };
 
       await createStream(createStreamParams, {
@@ -134,25 +135,28 @@ function Page() {
   }
 
   return (
-    <FormProvider {...methods}>
-      <Paper elevation={3}>
-        <CustomStepper
-          steps={steps.map((step) => step)}
-          activeStep={steps.indexOf(activeStep)}
-          handleBack={handleBack}
-          handleNext={handleNext}
-          handleFinish={handleFinish}
-        >
-          {activeStep === 'Configuration' && (
-            <ConfigurationSection key="configuration" />
-          )}
-          {activeStep === 'Recipients' && (
-            <RecipientsSections key="recipients" />
-          )}
-          {activeStep === 'Review' && <ReviewSections key="review" reviewTransaction={methods.getValues()} />}
-        </CustomStepper>
-      </Paper>
-    </FormProvider>
+    <>
+      <Seo titleTemplate='Create Streams' />
+      <FormProvider {...methods}>
+        <Paper elevation={3}>
+          <CustomStepper
+            steps={steps.map((step) => step)}
+            activeStep={steps.indexOf(activeStep)}
+            handleBack={handleBack}
+            handleNext={handleNext}
+            handleFinish={handleFinish}
+          >
+            {activeStep === 'Configuration' && (
+              <ConfigurationSection key="configuration" />
+            )}
+            {activeStep === 'Recipients' && (
+              <RecipientsSections key="recipients" />
+            )}
+            {activeStep === 'Review' && <ReviewSections key="review" reviewTransaction={methods.getValues()} />}
+          </CustomStepper>
+        </Paper>
+      </FormProvider>
+    </>
   );
 }
 

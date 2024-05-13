@@ -23,9 +23,9 @@ import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'
  * width and margin, making sure it displays correctly next to a sidebar. The WalletMultiButton
  * is styled directly via its `style` prop to match the application's design.
  *
- * @returns The AppBar component with a wallet connection button.
+ * @returns {JSX.Element} The AppBar component with a wallet connection button.
  */
-function Appbar() {
+function Appbar(): JSX.Element {
     return (
         <AppBar position="relative" sx={{ width: `calc(100% - ${DRAWER_WIDTH}px)`, ml: `${DRAWER_WIDTH}px`, padding: '10px 0' }}
         >

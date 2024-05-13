@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, ReactNode, useMemo } from 'react';
+import { FC, ReactNode, useEffect, useMemo, useState } from 'react';
 import {
   ConnectionProvider,
   WalletProvider,
@@ -11,8 +11,9 @@ import {
   WalletModalProvider,
   WalletMultiButton,
 } from '@solana/wallet-adapter-react-ui';
-import { clusterApiUrl } from '@solana/web3.js';
+import { clusterApiUrl, PublicKey } from '@solana/web3.js';
 import configs from '@/configs';
+import { useRouter } from 'next/navigation';
 
 // Default styles that can be overridden by your app
 require('@solana/wallet-adapter-react-ui/styles.css');
@@ -22,12 +23,8 @@ interface WalletProps {
 }
 
 const Wallet: FC<WalletProps> = ({ children }: WalletProps) => {
-  // The network can be set to 'devnet', 'testnet', or 'mainnet-beta'.
   const network = WalletAdapterNetwork.Devnet;
-
-  // You can also provide a custom RPC endpoint.
   const endpoint = useMemo(() => clusterApiUrl(network), [network]);
-
   const wallets = useMemo(() => [], [network]);
 
   return (
@@ -42,7 +39,35 @@ const Wallet: FC<WalletProps> = ({ children }: WalletProps) => {
 };
 
 const WalletContent: FC<{ children: ReactNode }> = ({ children }) => {
-  const { connected } = useWallet();
+  const { connected, publicKey, disconnect } = useWallet();
+  const [currentPublicKey, setCurrentPublicKey] = useState(publicKey);
+  const router = useRouter();
+
+  useEffect(() => {
+    const provider = (window as any).phantom?.solana;
+
+    if (!provider) {
+      router.push('/download');
+      return;
+    }
+
+    const handleAccountChange = (newPublicKey: PublicKey | null) => {
+      if (newPublicKey && newPublicKey.toBase58() !== currentPublicKey?.toBase58()) {
+        disconnect();
+        setCurrentPublicKey(null);
+      }
+    };
+
+    provider.on('accountChanged', handleAccountChange);
+
+    return () => {
+      provider.off('accountChanged', handleAccountChange);
+    };
+  }, [currentPublicKey, disconnect]);
+
+  useEffect(() => {
+    setCurrentPublicKey(publicKey);
+  }, [publicKey]);
 
   return (
     <>

@@ -8,13 +8,31 @@ import {
   StreamType,
   StreamDirection,
   ICreateResult,
+  ICancelData,
+  ITransactionResult,
+  Stream,
 } from '@streamflow/stream';
+import { SignerWalletAdapter } from '@solana/wallet-adapter-base';
+import { Keypair } from '@solana/web3.js';
 
+/**
+ * create a new instance of the SolanaStreamClient
+ */
 const solanaClient = new SolanaStreamClient(
   'https://api.devnet.solana.com',
   ICluster.Devnet,
 );
 
+/**
+ * Create a new stream on the Solana blockchain
+ *
+ * @async
+ * @param {ICreateStreamData} streamParams
+ * @param {ICreateSolanaExt} solanaParams
+ * @param {(stream: ICreateResult) => void} onSuccess
+ * @param {(error: unknown) => void} onError
+ * @returns {Promise<ICreateResult | undefined>}
+ */
 export const createStream = async (
   streamParams: ICreateStreamData,
   solanaParams: ICreateSolanaExt,
@@ -32,7 +50,16 @@ export const createStream = async (
   }
 };
 
-export const getAllStreams = async (address: string) => {
+/**
+ * Get all streams from the Solana blockchain
+ *
+ * @async
+ * @param {string} address
+ * @returns {Promise<[string, Stream][] | undefined>}
+ */
+export const getAllStreams = async (
+  address: string,
+): Promise<[string, Stream][] | undefined> => {
   try {
     const streams = await solanaClient.get({
       address,
@@ -42,5 +69,35 @@ export const getAllStreams = async (address: string) => {
     return streams;
   } catch (error) {
     console.error(error);
+  }
+};
+
+/**
+ * Cancel a stream on the Solana blockchain
+ *
+ * @async
+ * @param {ICancelData} cancelStreamParams
+ * @param {{
+ *     invoker: SignerWalletAdapter | Keypair;
+ *   }} solanaParams
+ * @param {(stream: ITransactionResult) => void} onSuccess
+ * @param {(error: unknown) => void} onError
+ * @returns {Promise<void>}
+ */
+export const cancelStream = async (
+  cancelStreamParams: ICancelData,
+  solanaParams: {
+    invoker: SignerWalletAdapter | Keypair;
+  },
+  onSuccess: (stream: ITransactionResult) => void,
+  onError: (error: unknown) => void,
+): Promise<void> => {
+  try {
+    const stream = await solanaClient.cancel(cancelStreamParams, solanaParams);
+    if (stream) {
+      onSuccess(stream);
+    }
+  } catch (error) {
+    onError(error);
   }
 };

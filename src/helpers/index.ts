@@ -1,10 +1,21 @@
 import { TransferPermissions, CancelPermissions } from '@/interfaces';
 import { PermissionRole, TimeUnit } from '@/types';
 
-export const getCurrentTimestampInSeconds = () => {
+/**
+ * Returns the current timestamp in seconds
+ *
+ * @returns {number}
+ */
+export const getCurrentTimestampInSeconds = (): number => {
   return Math.ceil(new Date().getTime() / 1000);
 };
 
+/**
+ * Returns the TransferPermissions object based on the PermissionRole
+ *
+ * @param {PermissionRole} value
+ * @returns {TransferPermissions}
+ */
 export const returnTransferableBy = (
   value: PermissionRole,
 ): TransferPermissions => {
@@ -20,6 +31,12 @@ export const returnTransferableBy = (
   }
 };
 
+/**
+ * return the CancelPermissions object based on the PermissionRole
+ *
+ * @param {PermissionRole} value
+ * @returns {CancelPermissions}
+ */
 export const returnCancelableBy = (
   value: PermissionRole,
 ): CancelPermissions => {
@@ -35,7 +52,17 @@ export const returnCancelableBy = (
   }
 };
 
-export const convertDurationToSeconds = (duration: number, unit: TimeUnit) => {
+/**
+ * Convert the duration to seconds
+ *
+ * @param {number} duration
+ * @param {TimeUnit} unit
+ * @returns {number}
+ */
+export const convertDurationToSeconds = (
+  duration: number,
+  unit: TimeUnit,
+): number => {
   const unitToSeconds: { [key in TimeUnit]: number } = {
     Second: 1,
     Minute: 60,

@@ -1,4 +1,5 @@
 'use client';
+
 import React, { useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -20,6 +21,8 @@ import { createStream } from '@/services/StreamflowService';
 import { useSnackbar } from '@/context/SnackbarContext';
 import { useRouter } from 'next/navigation';
 import Seo from '@/components/shared/Seo';
+import { BN } from '@streamflow/stream/solana';
+import { DELAY_IN_SECONDS } from '@/configs/constants';
 
 function Page() {
   const [activeStep, setActiveStep] = useState<StepSchemaKey>('Configuration');
@@ -80,19 +83,22 @@ function Page() {
         unlockSchedule
       } = methods.getValues();
 
+      const totalAmountInLamports = getBN(tokenAmount, 9);
       const unlockDurationInSeconds = convertDurationToSeconds(1, unlockSchedule);
       const periodInSeconds = convertDurationToSeconds(vestingDuration, vestingDurationUnit);
-      const amountPerPeriod = tokenAmount / (periodInSeconds / unlockDurationInSeconds);
+      const numberOfIntervals = periodInSeconds / unlockDurationInSeconds;
+      const amountPerInterval = totalAmountInLamports.div(new BN(numberOfIntervals));
+
 
       const createStreamParams = {
         recipient: recipient,
         tokenId: mint !== 'Native SOL' ? mint : 'So11111111111111111111111111111111111111112',
-        start: getCurrentTimestampInSeconds() + 60,
-        amount: getBN(tokenAmount, 9),
+        start: getCurrentTimestampInSeconds() + DELAY_IN_SECONDS,
+        amount: totalAmountInLamports,
         period: unlockDurationInSeconds,
-        cliff: getCurrentTimestampInSeconds() + 60,
+        cliff: getCurrentTimestampInSeconds() + DELAY_IN_SECONDS,
         cliffAmount: getBN(0, 9),
-        amountPerPeriod: getBN(amountPerPeriod, 9),
+        amountPerPeriod: amountPerInterval,
         name: 'TEST STREAM',
         canTopup: false,
         cancelableBySender:
@@ -104,7 +110,7 @@ function Page() {
         transferableByRecipient: returnTransferableBy(transferableRights)
           .transferableByRecipient,
         automaticWithdrawal: true,
-        withdrawalFrequency: 1,
+        withdrawalFrequency: unlockDurationInSeconds,
         partner: undefined,
       };
 

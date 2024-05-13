@@ -1,10 +1,10 @@
-import React from 'react'
-import { Helmet, HelmetProvider } from 'react-helmet-async'
+import React from 'react';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 interface SeoProps {
-    title: string
-    titleTemplate: string
-    description: string
+    title?: string;
+    titleTemplate?: string;
+    description?: string;
 }
 
 /**
@@ -16,7 +16,11 @@ interface SeoProps {
  * @param {string} param0.description
  * @returns {JSX.Element}
  */
-function Seo({ title, titleTemplate, description }: SeoProps): JSX.Element {
+function Seo({
+    title = 'Streamflow',
+    titleTemplate = 'Streamflow',
+    description = 'Streamflow is a decentralized streaming platform built on Solana blockchain.'
+}: SeoProps): JSX.Element {
     return (
         <HelmetProvider>
             <Helmet>
@@ -27,13 +31,7 @@ function Seo({ title, titleTemplate, description }: SeoProps): JSX.Element {
                 <meta name='description' content={description} />
             </Helmet>
         </HelmetProvider>
-    )
-}
-
-Seo.defaultProps = {
-    title: 'Streamflow',
-    titleTemplate: 'Streamflow',
-    description: 'Streamflow is a decentralized streaming platform built on Solana blockchain.'
+    );
 }
 
 export default Seo;

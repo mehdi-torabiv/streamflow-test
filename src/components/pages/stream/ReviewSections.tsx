@@ -1,7 +1,6 @@
 import { Paper, Typography } from "@mui/material"
 
 function ReviewSections({ reviewTransaction }: { reviewTransaction: any }) {
-    console.log({ reviewTransaction });
 
     return (
         <Paper className="p-5 shadow-none border border-gray-300" >
@@ -15,7 +14,7 @@ function ReviewSections({ reviewTransaction }: { reviewTransaction: any }) {
                 Recipient Wallet Address: {reviewTransaction.recipient}
             </Typography>
             <Typography>
-                Vesting Duration: {reviewTransaction.vestingDuration}
+                Vesting Duration: {reviewTransaction.vestingDuration} {reviewTransaction.vestingDurationUnit}
             </Typography>
             <Typography>
                 Unlock Schedule Type: {reviewTransaction.unlockSchedule}

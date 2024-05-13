@@ -29,14 +29,12 @@ function Appbar(): JSX.Element {
     return (
         <AppBar position="relative" sx={{ width: `calc(100% - ${DRAWER_WIDTH}px)`, ml: `${DRAWER_WIDTH}px`, padding: '10px 0' }}
         >
-            <Container maxWidth="xl">
-                <Box display="flex" justifyContent="flex-end">
-                    <WalletMultiButton style={{
-                        backgroundColor: '#4a90e2',
-                    }} />
-                </Box>
-            </Container>
-        </AppBar>
+            <Box display="flex" justifyContent="flex-end" px={2}>
+                <WalletMultiButton style={{
+                    backgroundColor: '#4a90e2',
+                }} />
+            </Box>
+        </AppBar >
     )
 }
 

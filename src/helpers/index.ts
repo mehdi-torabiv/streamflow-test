@@ -1,5 +1,6 @@
 import { TransferPermissions, CancelPermissions } from '@/interfaces';
 import { PermissionRole, TimeUnit } from '@/types';
+import { getBN } from '@streamflow/stream';
 
 /**
  * Returns the current timestamp in seconds

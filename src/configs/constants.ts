@@ -1,4 +1,5 @@
 export const DRAWER_WIDTH = '240';
+export const DELAY_IN_SECONDS = 60;
 
 export const vestingDurationOptions = [
   'Second',

@@ -7,6 +7,7 @@ import { Box, CssBaseline, StyledEngineProvider, ThemeProvider } from '@mui/mate
 import configs from '@/configs';
 import Appbar from '@/components/layouts/Appbar';
 import Sidebar from '@/components/layouts/Sidebar';
+import { SnackbarProvider } from '@/context/SnackbarContext';
 
 const WalletProvider = dynamic(() => import('@/providers/WalletProvider'), {
   ssr: false,
@@ -30,15 +31,17 @@ export default function RootLayout({
         <ThemeProvider theme={configs.theme}>
           <body className={inter.className} suppressHydrationWarning={true}>
             <CssBaseline />
-            <WalletProvider>
-              <Appbar />
-              <Box display="flex">
-                <Sidebar />
-                <Box flexGrow={1} p={2}>
-                  {children}
+            <SnackbarProvider>
+              <WalletProvider>
+                <Appbar />
+                <Box display="flex">
+                  <Sidebar />
+                  <Box flexGrow={1} p={2}>
+                    {children}
+                  </Box>
                 </Box>
-              </Box>
-            </WalletProvider>
+              </WalletProvider>
+            </SnackbarProvider>
           </body>
         </ThemeProvider>
       </StyledEngineProvider>

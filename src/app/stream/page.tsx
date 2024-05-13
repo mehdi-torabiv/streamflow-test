@@ -17,12 +17,19 @@ import {
 } from '@/helpers';
 import { getBN } from '@streamflow/stream';
 import { createStream } from '@/services/StreamflowService';
+import { useSnackbar } from '@/context/SnackbarContext';
+import { useRouter } from 'next/navigation';
 
 function Page() {
   const [activeStep, setActiveStep] = useState<StepSchemaKey>('Configuration');
   const [isTransactionLoading, setIsTransactionLoading] = useState<boolean>(false);
-  const steps: StepSchemaKey[] = ['Configuration', 'Recipients', 'Review'];
   const wallet = useWallet();
+
+  const router = useRouter();
+
+  const { showMessage } = useSnackbar();
+
+  const steps: StepSchemaKey[] = ['Configuration', 'Recipients', 'Review'];
 
   const methods = useForm({
     resolver: zodResolver(stepSchemas[activeStep]),
@@ -96,19 +103,23 @@ function Page() {
         transferableByRecipient: returnTransferableBy(transferableRights) // Whether the recipient can transfer the stream
           .transferableByRecipient,
         automaticWithdrawal: true, // Whether the stream should automatically withdraw
-        withdrawalFrequency: undefined, // How often the stream should withdraw (it will use period as default)
+        withdrawalFrequency: 1, // How often the stream should withdraw (it will use period as default)
         partner: undefined, // The public key of the partner
       };
-      console.log({ createStreamParams });
 
-      const result = await createStream(createStreamParams, {
+      await createStream(createStreamParams, {
         sender: wallet,
         isNative: true
-      });
-      console.log({ result });
+      },
+        (stream) => {
+          showMessage(`${stream.txId} created successfully.`, 'success');
+          router.push('/')
+        },
+        (error) => {
+          showMessage(`${error}`, 'error');
+        }
+      );
       setIsTransactionLoading(false);
-    } else {
-      console.log('Final validation failed:', methods.formState.errors);
     }
   };
 

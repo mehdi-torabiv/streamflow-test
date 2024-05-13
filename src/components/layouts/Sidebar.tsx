@@ -37,8 +37,8 @@ function Sidebar() {
     const pathname = usePathname();
 
     const menuItems: SidebarMenuItem[] = [
-        { text: 'Home', path: '/' },
-        { text: 'Stream', path: '/stream' },
+        { text: 'Stream list', path: '/' },
+        { text: 'Create stream', path: '/stream' },
     ];
 
     return (

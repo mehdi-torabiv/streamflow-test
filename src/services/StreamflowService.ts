@@ -1,9 +1,13 @@
-import { SolanaStreamClient } from '@streamflow/stream/solana';
+import {
+  ICreateSolanaExt,
+  SolanaStreamClient,
+} from '@streamflow/stream/solana';
 import {
   ICreateStreamData,
   ICluster,
   StreamType,
   StreamDirection,
+  ICreateResult,
 } from '@streamflow/stream';
 
 const solanaClient = new SolanaStreamClient(
@@ -13,13 +17,18 @@ const solanaClient = new SolanaStreamClient(
 
 export const createStream = async (
   streamParams: ICreateStreamData,
-  solanaParams: any,
-) => {
+  solanaParams: ICreateSolanaExt,
+  onSuccess: (stream: ICreateResult) => void,
+  onError: (error: unknown) => void,
+): Promise<ICreateResult | undefined> => {
   try {
     const stream = await solanaClient.create(streamParams, solanaParams);
+    if (stream) {
+      onSuccess(stream);
+    }
     return stream;
   } catch (error) {
-    console.error(error);
+    onError(error);
   }
 };
 

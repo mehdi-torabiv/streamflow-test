@@ -52,7 +52,10 @@ const WalletContent: FC<{ children: ReactNode }> = ({ children }) => {
     }
 
     const handleAccountChange = (newPublicKey: PublicKey | null) => {
-      if (newPublicKey && newPublicKey.toBase58() !== currentPublicKey?.toBase58()) {
+      if (
+        newPublicKey &&
+        newPublicKey.toBase58() !== currentPublicKey?.toBase58()
+      ) {
         disconnect();
         setCurrentPublicKey(null);
       }

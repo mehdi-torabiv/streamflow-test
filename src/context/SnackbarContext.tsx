@@ -24,7 +24,9 @@ type SnackbarProviderProps = {
  * @param {ReactNode} props.children - The child components that will consume the snackbar context.
  * @returns {JSX.Element} The provider component that wraps the children with Snackbar context.
  */
-export const SnackbarProvider = ({ children }: SnackbarProviderProps): JSX.Element => {
+export const SnackbarProvider = ({
+  children,
+}: SnackbarProviderProps): JSX.Element => {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState('');
   const [severity, setSeverity] = useState<

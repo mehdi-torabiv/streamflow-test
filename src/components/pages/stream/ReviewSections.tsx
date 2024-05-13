@@ -1,24 +1,11 @@
-import { PermissionRole, TimeUnit } from '@/types';
+import { ReviewTransaction } from '@/interfaces';
 import { Paper, Typography } from '@mui/material';
-
-interface ReviewTransaction {
-  cancellationRights: PermissionRole;
-  mint: string;
-  recipient: string;
-  tokenAmount: string;
-  transferableRights: PermissionRole;
-  unlockSchedule: string;
-  vestingDuration: number;
-  vestingDurationUnit: TimeUnit;
-}
 
 interface ReviewSectionsProps {
   reviewTransaction: ReviewTransaction;
 }
 
 function ReviewSections({ reviewTransaction }: ReviewSectionsProps) {
-  console.log(reviewTransaction);
-
   return (
     <Paper className="border border-gray-300 p-5 shadow-none">
       <Typography>

@@ -24,6 +24,7 @@ import Seo from '@/components/shared/Seo';
 import { BN } from '@streamflow/stream/solana';
 import { DELAY_IN_SECONDS } from '@/configs/constants';
 import { Keypair } from '@solana/web3.js';
+import { ReviewTransaction } from '@/interfaces';
 
 function Page() {
   const [activeStep, setActiveStep] = useState<StepSchemaKey>('Configuration');
@@ -176,7 +177,7 @@ function Page() {
             {activeStep === 'Review' && (
               <ReviewSections
                 key="review"
-                reviewTransaction={methods.getValues()}
+                reviewTransaction={methods.getValues() as ReviewTransaction}
               />
             )}
           </CustomStepper>

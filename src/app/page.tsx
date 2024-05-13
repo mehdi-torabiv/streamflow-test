@@ -21,6 +21,7 @@ import { useWallet } from '@solana/wallet-adapter-react';
 import { useSnackbar } from '@/context/SnackbarContext';
 import Seo from '@/components/shared/Seo';
 import { useState } from 'react';
+import { Keypair } from '@solana/web3.js';
 
 export default function Home() {
   const wallet = useWallet();
@@ -32,13 +33,18 @@ export default function Home() {
   const { showMessage } = useSnackbar();
 
   const handleCancelStream = (id: string) => async () => {
+    if (!wallet || !wallet.publicKey) {
+      showMessage('Wallet not connected.', 'error');
+      return;
+    }
+
     setCancelLoading((prev) => ({ ...prev, [id]: true }));
     await cancelStream(
       {
         id: id,
       },
       {
-        invoker: wallet,
+        invoker: wallet as unknown as Keypair,
       },
       (stream) => {
         showMessage(`${stream.txId} canceled successfully.`, 'success');

@@ -23,6 +23,7 @@ import { useRouter } from 'next/navigation';
 import Seo from '@/components/shared/Seo';
 import { BN } from '@streamflow/stream/solana';
 import { DELAY_IN_SECONDS } from '@/configs/constants';
+import { Keypair } from '@solana/web3.js';
 
 function Page() {
   const [activeStep, setActiveStep] = useState<StepSchemaKey>('Configuration');
@@ -115,7 +116,7 @@ function Page() {
       };
 
       await createStream(createStreamParams, {
-        sender: wallet,
+        sender: wallet as unknown as Keypair,
         isNative: true
       },
         (stream) => {

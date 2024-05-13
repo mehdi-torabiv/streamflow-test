@@ -5,7 +5,7 @@ import { TOKEN_PROGRAM_ID } from "@solana/spl-token";
 import { TokenListProvider, TokenInfo } from "@solana/spl-token-registry";
 
 interface TokenBalance {
-    mint: string;
+    mint: string | null;
     balance: number;
     name?: string;
     symbol?: string;
@@ -46,8 +46,9 @@ function useSolanaTokens(): UseSolanaTokensResult {
                 }
 
                 const solInfo = await connection.getAccountInfo(publicKey as PublicKey);
+
                 const solBalance: TokenBalance = {
-                    mint: "Native SOL",
+                    mint: 'Native SOL',
                     balance: solInfo ? solInfo.lamports / LAMPORTS_PER_SOL : 0,
                     name: "Solana",
                     symbol: "SOL",
@@ -65,6 +66,7 @@ function useSolanaTokens(): UseSolanaTokensResult {
                 const splTokens = tokenAccounts.value.map(account => {
                     const tokenBalance = account.account.data.parsed.info.tokenAmount;
                     const tokenInfo: TokenInfo | undefined = tokensData.find(t => t.address === account.account.data.parsed.info.mint);
+
                     return {
                         mint: account.account.data.parsed.info.mint,
                         balance: tokenBalance.uiAmount,
@@ -72,9 +74,11 @@ function useSolanaTokens(): UseSolanaTokensResult {
                         symbol: tokenInfo?.symbol,
                         logoURI: tokenInfo?.logoURI
                     };
-                });
+                }).filter(token => token.balance > 0);
 
-                setTokens([solBalance, ...splTokens]);
+                const filteredTokens = [solBalance, ...splTokens].filter(token => token.balance > 0);
+
+                setTokens(filteredTokens);
             } catch (error) {
                 console.error("Failed to fetch token data:", error);
             }

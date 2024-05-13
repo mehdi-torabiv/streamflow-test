@@ -1,92 +1,137 @@
+import { useFormContext, Controller } from 'react-hook-form';
 import useSolanaTokens from '@/hooks/useSolanaTokens';
-import { Box, Autocomplete, TextField, InputAdornment, Avatar, Typography, Select, MenuItem } from '@mui/material'
-import { useState } from 'react'
-
-const VestingDurationOptions = ['per second', 'per minute', 'per hour', 'per day', 'per week', 'bi-week', 'per month', 'per quarter', 'per year']
-
-const cancelationsRights = ['Recipient', 'Sender', 'Both', 'Neither'];
-const transferableRights = ['Recipient', 'Sender', 'Both', 'Neither'];
+import { TextField, Select, MenuItem, FormControl, FormHelperText, InputLabel, Grid } from '@mui/material';
+import { unlockScheduleOptions, vestingDurationOptions, transferableRights, cancellationRights } from '@/configs/constants';
 
 function ConfigurationSection() {
-    const [value, setValue] = useState<any>(null);
-    const { tokens, loading } = useSolanaTokens();
+    const { control } = useFormContext();
+    const { tokens } = useSolanaTokens();
 
     return (
-        <div className='flex flex-col space-y-5'>
-            <Autocomplete
-                fullWidth
-                disablePortal
-                id="token-select"
-                options={tokens}
-                loading={loading}
-                value={value}
-                onChange={(event, newValue) => setValue(newValue)}
-                renderInput={(params) => (
-                    <TextField
-                        {...params}
-                        label="Token"
-                        InputProps={{
-                            ...params.InputProps,
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    {value && (
-                                        <Avatar src={value.logoURI} alt={value.name} sx={{ width: 24, height: 24, margin: '0 auto' }} />
-                                    )}
-                                </InputAdornment>
-                            ),
-                        }}
-                    />
-                )}
-                getOptionLabel={(option) => option.name ?? ''}
-                renderOption={(props, option) => (
-                    <Box component="li" {...props} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                            <Avatar src={option.logoURI} alt={option.name} sx={{ width: 24, height: 24, marginRight: 2 }} />
-                            <Typography variant="body2">{option.name}</Typography>
-                        </Box>
-                        <Typography variant="caption" sx={{ marginLeft: 2 }}>{option.balance}</Typography>
-                    </Box>
-                )}
-            />
-            <div className='flex flex-row items-center justify-between space-x-5'>
-                <TextField
-                    label="Vesting Duration"
-                    type="number"
-                    fullWidth
+        <Grid container spacing={2}>
+            <Grid item xs={6}>
+                <Controller
+                    name="mint"
+                    control={control}
+                    defaultValue=""
+                    render={({ field, fieldState: { error } }) => (
+                        <FormControl fullWidth error={!!error}>
+                            <InputLabel id="token-label">Token</InputLabel>
+                            <Select
+                                labelId="token-label"
+                                id="token-select"
+                                {...field}
+                                label="Token"
+                                onChange={(e) => field.onChange(e.target.value)}
+                                value={field.value || ''}
+                            >
+                                {tokens.map((token) => (
+                                    <MenuItem key={token.mint || ''} value={token.mint || ''}>
+                                        {token.name}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                            {error && <FormHelperText>{error.message}</FormHelperText>}
+                        </FormControl>
+                    )}
                 />
-                <Select fullWidth>
-                    {
-                        VestingDurationOptions.map((option, index) => (
-                            <MenuItem key={index} value={option}>{option}</MenuItem>
-                        ))
-                    }
-                </Select>
-            </div>
-            <Select fullWidth>
-                {
-                    VestingDurationOptions.map((option, index) => (
-                        <MenuItem key={index} value={option}>{option}</MenuItem>
-                    ))
-                }
-            </Select>
-            <div className='flex justify-between space-x-5'>
-                <Select fullWidth>
-                    {
-                        cancelationsRights.map((option, index) => (
-                            <MenuItem key={index} value={option}>{option}</MenuItem>
-                        ))
-                    }
-                </Select>
-                <Select fullWidth>
-                    {
-                        transferableRights.map((option, index) => (
-                            <MenuItem key={index} value={option}>{option}</MenuItem>
-                        ))
-                    }
-                </Select>
-            </div>
-        </div>
-    )
+            </Grid>
+            <Grid item xs={6}>
+                <Controller
+                    name="unlockSchedule"
+                    control={control}
+                    render={({ field, fieldState: { error } }) => (
+                        <FormControl fullWidth error={!!error}>
+                            <InputLabel>Unlock Schedule</InputLabel>
+                            <Select
+                                {...field}
+                                label="Unlock Schedule"
+                                value={field.value || ''}
+                            >
+                                {unlockScheduleOptions.map((option, index) => (
+                                    <MenuItem key={index} value={option.value}>{option.label}</MenuItem>
+                                ))}
+                            </Select>
+                            {error && <FormHelperText>{error.message}</FormHelperText>}
+                        </FormControl>
+                    )}
+                />
+            </Grid>
+            <Grid item xs={6}>
+                <Controller
+                    name="vestingDuration"
+                    control={control}
+                    defaultValue={0}
+                    render={({ field: { onChange, value, ...fieldProps }, fieldState: { error } }) => (
+                        <TextField
+                            {...fieldProps}
+                            value={value}
+                            onChange={e => onChange(Number(e.target.value))}
+                            label="Vesting Duration"
+                            type="number"
+                            fullWidth
+                            error={!!error}
+                            helperText={error ? error.message : ''}
+                        />
+                    )}
+                />
+            </Grid>
+            <Grid item xs={6}>
+                <Controller
+                    name="vestingDurationUnit"
+                    control={control}
+                    render={({ field, fieldState: { error } }) => (
+                        <FormControl fullWidth error={!!error}>
+                            <InputLabel>Vesting Duration Unit</InputLabel>
+                            <Select {...field} label="Vesting Duration Unit"
+                                value={field.value || ''}>
+                                {vestingDurationOptions.map((option, index) => (
+                                    <MenuItem key={index} value={option}>{option}</MenuItem>
+                                ))}
+                            </Select>
+                            {error && <FormHelperText>{error.message}</FormHelperText>}
+                        </FormControl>
+                    )}
+                />
+            </Grid>
+            <Grid item xs={6}>
+                <Controller
+                    name="cancellationRights"
+                    control={control}
+                    defaultValue={'Sender'}
+                    render={({ field, fieldState: { error } }) => (
+                        <FormControl fullWidth error={!!error}>
+                            <InputLabel>Cancellation Rights</InputLabel>
+                            <Select {...field} label="Cancellation Rights">
+                                {cancellationRights.map((option, index) => (
+                                    <MenuItem key={index} value={option}>{option}</MenuItem>
+                                ))}
+                            </Select>
+                            {error && <FormHelperText>{error.message}</FormHelperText>}
+                        </FormControl>
+                    )}
+                />
+            </Grid>
+            <Grid item xs={6}>
+                <Controller
+                    name="transferableRights"
+                    control={control}
+                    defaultValue={'Sender'}
+                    render={({ field, fieldState: { error } }) => (
+                        <FormControl fullWidth error={!!error}>
+                            <InputLabel>Transferable Rights</InputLabel>
+                            <Select {...field} label="Transferable Rights">
+                                {transferableRights.map((option, index) => (
+                                    <MenuItem key={index} value={option}>{option}</MenuItem>
+                                ))}
+                            </Select>
+                            {error && <FormHelperText>{error.message}</FormHelperText>}
+                        </FormControl>
+                    )}
+                />
+            </Grid>
+        </Grid>
+    );
 }
 
-export default ConfigurationSection
+export default ConfigurationSection;

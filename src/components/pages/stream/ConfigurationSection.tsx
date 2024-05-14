@@ -22,7 +22,7 @@ function ConfigurationSection() {
 
   return (
     <Grid container spacing={2}>
-      <Grid item xs={6}>
+      <Grid item xs={12} md={6}>
         <Controller
           name="mint"
           control={control}
@@ -49,7 +49,7 @@ function ConfigurationSection() {
           )}
         />
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={12} md={6}>
         <Controller
           name="unlockSchedule"
           control={control}
@@ -72,7 +72,7 @@ function ConfigurationSection() {
           )}
         />
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={12} md={6}>
         <Controller
           name="vestingDuration"
           control={control}
@@ -94,7 +94,7 @@ function ConfigurationSection() {
           )}
         />
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={12} md={6}>
         <Controller
           name="vestingDurationUnit"
           control={control}
@@ -117,7 +117,7 @@ function ConfigurationSection() {
           )}
         />
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={12} md={6}>
         <Controller
           name="cancellationRights"
           control={control}
@@ -137,7 +137,7 @@ function ConfigurationSection() {
           )}
         />
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={12} md={6}>
         <Controller
           name="transferableRights"
           control={control}

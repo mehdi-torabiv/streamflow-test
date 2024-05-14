@@ -6,7 +6,7 @@ function RecipientsSections() {
 
   return (
     <Grid container spacing={2}>
-      <Grid item xs={6}>
+      <Grid item xs={12} md={6}>
         <Controller
           name="tokenAmount"
           control={control}
@@ -23,7 +23,7 @@ function RecipientsSections() {
           )}
         />
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={12} md={6}>
         <Controller
           name="recipient"
           control={control}

@@ -8,6 +8,8 @@ import {
   ListItemButton,
   ListItemText,
   Toolbar,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import { useRouter, usePathname } from 'next/navigation';
 
@@ -15,6 +17,11 @@ interface SidebarMenuItem {
   text: string;
   path: string;
 }
+
+const menuItems: SidebarMenuItem[] = [
+  { text: 'Stream list', path: '/' },
+  { text: 'Create stream', path: '/stream' },
+];
 
 /**
  * Sidebar component for navigation in a Next.js application.
@@ -28,7 +35,7 @@ interface SidebarMenuItem {
  * @component
  * @example
  * return (
- *   <Sidebar />
+ *   <Sidebar mobileOpen={mobileOpen} handleDrawerToggle={handleDrawerToggle} />
  * )
  *
  * @remarks
@@ -37,31 +44,24 @@ interface SidebarMenuItem {
  *
  * The component highlights the currently active menu item based on the current route path.
  * It responds to clicks on each menu item by navigating to the respective route.
+ * 
+ * On mobile screens, the sidebar is displayed as a temporary drawer, and on larger screens,
+ * it is displayed as a permanent drawer. The drawer can be toggled using a button in the Appbar.
  *
+ * @param {Object} props - The properties object.
+ * @param {boolean} props.mobileOpen - Boolean indicating if the drawer is open on mobile screens.
+ * @param {Function} props.handleDrawerToggle - Function to handle the drawer toggle state.
+ * 
  * @returns {JSX.Element} The Sidebar component with a list of menu items.
  */
-function Sidebar(): JSX.Element {
+function Sidebar({ mobileOpen, handleDrawerToggle }: { mobileOpen: boolean, handleDrawerToggle: () => void }): JSX.Element {
   const router = useRouter();
   const pathname = usePathname();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const menuItems: SidebarMenuItem[] = [
-    { text: 'Stream list', path: '/' },
-    { text: 'Create stream', path: '/stream' },
-  ];
-
-  return (
-    <Drawer
-      sx={{
-        width: `${DRAWER_WIDTH}px`,
-        flexShrink: 0,
-        '& .MuiDrawer-paper': {
-          width: `${DRAWER_WIDTH}px`,
-          backgroundColor: 'primary.main',
-        },
-      }}
-      variant="permanent"
-      anchor="left"
-    >
+  const drawer = (
+    <>
       <Toolbar />
       <Divider />
       <List
@@ -74,7 +74,10 @@ function Sidebar(): JSX.Element {
           <ListItem key={item.text} disablePadding>
             <ListItemButton
               selected={pathname === item.path}
-              onClick={() => router.push(item.path)}
+              onClick={() => {
+                router.push(item.path);
+                if (isMobile) handleDrawerToggle();
+              }}
               sx={{
                 '&.Mui-selected': {
                   backgroundColor: 'white',
@@ -91,6 +94,27 @@ function Sidebar(): JSX.Element {
           </ListItem>
         ))}
       </List>
+    </>
+  );
+
+  return (
+    <Drawer
+      variant={isMobile ? "temporary" : "permanent"}
+      open={isMobile ? mobileOpen : true}
+      onClose={handleDrawerToggle}
+      ModalProps={{
+        keepMounted: true,
+      }}
+      sx={{
+        width: isMobile ? 'auto' : `${DRAWER_WIDTH}px`,
+        flexShrink: 0,
+        '& .MuiDrawer-paper': {
+          width: isMobile ? '90%' : `${DRAWER_WIDTH}px`,
+          backgroundColor: 'primary.main',
+        },
+      }}
+    >
+      {drawer}
     </Drawer>
   );
 }

@@ -13,6 +13,7 @@ import configs from '@/configs';
 import Appbar from '@/components/layouts/Appbar';
 import Sidebar from '@/components/layouts/Sidebar';
 import { SnackbarProvider } from '@/context/SnackbarContext';
+import { useState } from 'react';
 
 const WalletProvider = dynamic(() => import('@/providers/WalletProvider'), {
   ssr: false,
@@ -25,6 +26,12 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
+
   return (
     <html lang="en">
       <StyledEngineProvider injectFirst>
@@ -33,9 +40,9 @@ export default function RootLayout({
             <CssBaseline />
             <SnackbarProvider>
               <WalletProvider>
-                <Appbar />
+                <Appbar onMenuClick={handleDrawerToggle} />
                 <Box display="flex">
-                  <Sidebar />
+                  <Sidebar mobileOpen={mobileOpen} handleDrawerToggle={handleDrawerToggle} />
                   <Box flexGrow={1} p={2}>
                     {children}
                   </Box>

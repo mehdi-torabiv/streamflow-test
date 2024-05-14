@@ -7,6 +7,7 @@ import {
   useWallet,
 } from '@solana/wallet-adapter-react';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
+import { PhantomWalletAdapter } from '@solana/wallet-adapter-wallets';
 import {
   WalletModalProvider,
   WalletMultiButton,
@@ -25,7 +26,9 @@ interface WalletProps {
 const Wallet: FC<WalletProps> = ({ children }: WalletProps) => {
   const network = WalletAdapterNetwork.Devnet;
   const endpoint = useMemo(() => clusterApiUrl(network), [network]);
-  const wallets = useMemo(() => [], [network]);
+  const wallets = useMemo(() => [
+    new PhantomWalletAdapter()
+  ], [network]);
 
   return (
     <ConnectionProvider endpoint={endpoint}>
@@ -47,7 +50,6 @@ const WalletContent: FC<{ children: ReactNode }> = ({ children }) => {
     const provider = (window as any).phantom?.solana;
 
     if (!provider) {
-      router.push('/download');
       return;
     }
 

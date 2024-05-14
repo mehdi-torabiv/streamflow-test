@@ -23,9 +23,15 @@ import { DELAY_IN_SECONDS } from '@/configs/constants';
 import { Keypair } from '@solana/web3.js';
 import { ReviewTransaction } from '@/interfaces';
 
-const ConfigurationSection = lazy(() => import('@/components/pages/stream/ConfigurationSection'));
-const RecipientsSections = lazy(() => import('@/components/pages/stream/RecipientsSections'));
-const ReviewSections = lazy(() => import('@/components/pages/stream/ReviewSections'));
+const ConfigurationSection = lazy(
+  () => import('@/components/pages/stream/ConfigurationSection'),
+);
+const RecipientsSections = lazy(
+  () => import('@/components/pages/stream/RecipientsSections'),
+);
+const ReviewSections = lazy(
+  () => import('@/components/pages/stream/ReviewSections'),
+);
 
 function Page() {
   const [activeStep, setActiveStep] = useState<StepSchemaKey>('Configuration');

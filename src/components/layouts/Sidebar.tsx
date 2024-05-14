@@ -44,17 +44,23 @@ const menuItems: SidebarMenuItem[] = [
  *
  * The component highlights the currently active menu item based on the current route path.
  * It responds to clicks on each menu item by navigating to the respective route.
- * 
+ *
  * On mobile screens, the sidebar is displayed as a temporary drawer, and on larger screens,
  * it is displayed as a permanent drawer. The drawer can be toggled using a button in the Appbar.
  *
  * @param {Object} props - The properties object.
  * @param {boolean} props.mobileOpen - Boolean indicating if the drawer is open on mobile screens.
  * @param {Function} props.handleDrawerToggle - Function to handle the drawer toggle state.
- * 
+ *
  * @returns {JSX.Element} The Sidebar component with a list of menu items.
  */
-function Sidebar({ mobileOpen, handleDrawerToggle }: { mobileOpen: boolean, handleDrawerToggle: () => void }): JSX.Element {
+function Sidebar({
+  mobileOpen,
+  handleDrawerToggle,
+}: {
+  mobileOpen: boolean;
+  handleDrawerToggle: () => void;
+}): JSX.Element {
   const router = useRouter();
   const pathname = usePathname();
   const theme = useTheme();
@@ -99,7 +105,7 @@ function Sidebar({ mobileOpen, handleDrawerToggle }: { mobileOpen: boolean, hand
 
   return (
     <Drawer
-      variant={isMobile ? "temporary" : "permanent"}
+      variant={isMobile ? 'temporary' : 'permanent'}
       open={isMobile ? mobileOpen : true}
       onClose={handleDrawerToggle}
       ModalProps={{

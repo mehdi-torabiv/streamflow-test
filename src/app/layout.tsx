@@ -42,7 +42,10 @@ export default function RootLayout({
               <WalletProvider>
                 <Appbar onMenuClick={handleDrawerToggle} />
                 <Box display="flex">
-                  <Sidebar mobileOpen={mobileOpen} handleDrawerToggle={handleDrawerToggle} />
+                  <Sidebar
+                    mobileOpen={mobileOpen}
+                    handleDrawerToggle={handleDrawerToggle}
+                  />
                   <Box flexGrow={1} p={2}>
                     {children}
                   </Box>

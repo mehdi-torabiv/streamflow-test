@@ -1,6 +1,13 @@
 'use client';
 import { DRAWER_WIDTH } from '@/configs/constants';
-import { AppBar, IconButton, Toolbar, Typography, useMediaQuery, useTheme } from '@mui/material';
+import {
+  AppBar,
+  IconButton,
+  Toolbar,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import configs from '@/configs';

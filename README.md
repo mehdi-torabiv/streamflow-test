@@ -124,6 +124,15 @@ npm run prepare
 - **husky**: Git hooks
 - **tailwindcss**: Utility-first CSS framework
 
+## What Next?
+
+There are a lot of improvements possible for this project. Some of them are:
+
+- [ ] Wring unit test & integration tests.
+- [ ] Implement E2E (End to End) tests for testing application flows.
+- [ ] Configuring Error Boundary and use Error Tracking tools like Sentry.
+- [ ] Dockerize application.
+
 ## Contributing
 
 Feel free to contribute to this project by opening a pull request. For major changes, please open an issue first to discuss what you would like to change.

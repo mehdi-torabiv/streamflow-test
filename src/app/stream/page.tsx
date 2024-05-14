@@ -1,13 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { lazy, Suspense, useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Backdrop, CircularProgress, Paper } from '@mui/material';
 import CustomStepper from '@/components/shared/CustomStepper';
-import ConfigurationSection from '@/components/pages/stream/ConfigurationSection';
-import RecipientsSections from '@/components/pages/stream/RecipientsSections';
-import ReviewSections from '@/components/pages/stream/ReviewSections';
 import { stepSchemas, StepSchemaKey } from '@/utils/schema/tokenVestingSchema';
 import { useWallet } from '@solana/wallet-adapter-react';
 import {
@@ -25,6 +22,10 @@ import { BN } from '@streamflow/stream/solana';
 import { DELAY_IN_SECONDS } from '@/configs/constants';
 import { Keypair } from '@solana/web3.js';
 import { ReviewTransaction } from '@/interfaces';
+
+const ConfigurationSection = lazy(() => import('@/components/pages/stream/ConfigurationSection'));
+const RecipientsSections = lazy(() => import('@/components/pages/stream/RecipientsSections'));
+const ReviewSections = lazy(() => import('@/components/pages/stream/ReviewSections'));
 
 function Page() {
   const [activeStep, setActiveStep] = useState<StepSchemaKey>('Configuration');
@@ -168,18 +169,20 @@ function Page() {
             handleNext={handleNext}
             handleFinish={handleFinish}
           >
-            {activeStep === 'Configuration' && (
-              <ConfigurationSection key="configuration" />
-            )}
-            {activeStep === 'Recipients' && (
-              <RecipientsSections key="recipients" />
-            )}
-            {activeStep === 'Review' && (
-              <ReviewSections
-                key="review"
-                reviewTransaction={methods.getValues() as ReviewTransaction}
-              />
-            )}
+            <Suspense fallback={<CircularProgress />}>
+              {activeStep === 'Configuration' && (
+                <ConfigurationSection key="configuration" />
+              )}
+              {activeStep === 'Recipients' && (
+                <RecipientsSections key="recipients" />
+              )}
+              {activeStep === 'Review' && (
+                <ReviewSections
+                  key="review"
+                  reviewTransaction={methods.getValues() as ReviewTransaction}
+                />
+              )}
+            </Suspense>
           </CustomStepper>
         </Paper>
       </FormProvider>
